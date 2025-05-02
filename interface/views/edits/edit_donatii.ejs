@@ -1,0 +1,13 @@
+<form action="/donatii/edit/<%= donatie.id_donatie %>" method="post">
+
+    <label for="furnizor">Furnizor:</label>
+    <input type="text" id="furnizor" name="furnizor" value="<%= donatie.furnizor %>" required>
+
+    <label for="produs">Produs:</label>
+    <input type="text" id="produs" name="produs" value="<%= donatie.produs %>" required>
+
+    <label for="data">Data:</label>
+    <input type="date" id="data" name="data" value="<%= donatie.data.toISOString().split('T')[0] %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

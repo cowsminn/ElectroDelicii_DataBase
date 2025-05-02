@@ -1,0 +1,7 @@
+<form action="/preturi/edit/<%= pret.magazin %>/<%= pret.produs %>" method="post">
+
+    <label for="suma">Suma:</label>
+    <input type="number" id="suma" name="suma" value="<%= pret.suma %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

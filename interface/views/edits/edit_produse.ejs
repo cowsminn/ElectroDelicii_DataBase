@@ -1,0 +1,10 @@
+<form action="/produse/edit/<%= produs.id_produs %>" method="post">
+
+    <label for="nume">Nume:</label>
+    <input type="text" id="nume" name="nume" value="<%= produs.nume %>" required>
+
+    <label for="stare">Stare:</label>
+    <input type="text" id="stare" name="stare" value="<%= produs.stare %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

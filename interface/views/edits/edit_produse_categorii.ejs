@@ -1,0 +1,7 @@
+<form action="/produse_categorii/edit/<%= produs_categorie.categorie %>/<%= produs_categorie.produs %>" method="post">
+
+    <label for="data">Data:</label>
+    <input type="date" id="data" name="data" value="<%= produs_categorie.data.toISOString().split('T')[0] %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

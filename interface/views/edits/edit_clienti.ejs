@@ -1,0 +1,13 @@
+<form action="/clienti/edit/<%= client.id_client %>" method="post">
+
+    <label for="nume">Nume:</label>
+    <input type="text" id="nume" name="nume" value="<%= client.nume %>" required>
+
+    <label for="prenume">Prenume:</label>
+    <input type="text" id="prenume" name="prenume" value="<%= client.prenume %>" required>
+
+    <label for="nr_telefon">Nr_telefon:</label>
+    <input type="text" id="nr_telefon" name="nr_telefon" value="<%= client.nr_telefon %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

@@ -1,0 +1,22 @@
+<form action="/furnizori/edit/<%= furnizor.id_furnizor %>" method="post">
+
+    <label for="nume">Nume:</label>
+    <input type="text" id="nume" name="nume" value="<%= furnizor.nume %>" required>
+
+    <label for="judet">Judet:</label>
+    <input type="text" id="judet" name="judet" value="<%= furnizor.judet %>" required>
+    
+    <label for="oras">Oras:</label>
+    <input type="text" id="oras" name="oras" value="<%= furnizor.oras %>" required>
+
+    <label for="strada">Strada:</label>
+    <input type="text" id="strada" name="strada" value="<%= furnizor.strada %>" required>
+
+    <label for="numar">Numar:</label>
+    <input type="text" id="numar" name="numar" value="<%= furnizor.numar %>" required>
+
+    <label for="cod_postal">Cod_postal:</label>
+    <input type="number" id="cod_postal" name="cod_postal" value="<%= furnizor.cod_postal %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

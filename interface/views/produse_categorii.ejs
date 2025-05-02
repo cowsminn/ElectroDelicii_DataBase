@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+        
+        .sorted-asc::after {
+            content: ' ↑';
+        } 
+
+         .sorted-desc::after {
+            content: ' ↓';
+        } 
+
+    </style>
+</head>
+<body>
+    <h1>Lista Produse_Categorii</h1>
+    <table id="produse_categoriiTable">
+        <thead>
+            <tr>
+                <th class="sortable" onclick="sortTable(0)">Produs</th>
+                <th class="sortable" onclick="sortTable(1)">Categorie</th>
+                <th class="sortable" onclick="sortTable(2)">Data</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% produse_categorii.forEach(produs_categorie => { %>
+                <tr>
+                    <td><%= produs_categorie.produs %></td>
+                    <td><%= produs_categorie.categorie %></td>
+                    <td><%= produs_categorie.data.toISOString().split('T')[0] %></td>
+                    <td>
+                        <a href="/produse_categorii/edit/<%= produs_categorie.categorie %>/<%= produs_categorie.produs %>" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/produse_categorii/delete/<%= produs_categorie.categorie %>/<%= produs_categorie.produs %>" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <script>
+        const sortOrder = new Array(6).fill('asc');
+    
+        function sortTable(columnIndex) {
+            const table = document.getElementById('produse_categoriiTable');
+            const rows = Array.from(table.rows).slice(1); 
+    
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].textContent.trim();
+                const cellB = b.cells[columnIndex].textContent.trim();
+    
+                return cellA.localeCompare(cellB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+    
+            if (sortOrder[columnIndex] === 'desc') {
+                rows.reverse();
+                sortOrder[columnIndex] = 'asc';
+            } else {
+                sortOrder[columnIndex] = 'desc';
+            }
+    
+            for (const row of rows) {
+                table.tBodies[0].appendChild(row);
+            }
+    
+            resetSortIndicators(columnIndex);
+            updateSortIndicator(columnIndex, sortOrder[columnIndex]);
+        }
+    
+        function resetSortIndicators(currentColumn) {
+            const headers = document.querySelectorAll('#produse_categoriiTable th');
+    
+            headers.forEach((header, index) => {
+                if (index !== currentColumn) {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
+        }
+    
+        function updateSortIndicator(columnIndex, order) {
+            const headers = document.querySelectorAll('#produse_categoriiTable th');
+    
+            headers.forEach((header, index) => {
+                if (index === columnIndex) {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    header.classList.add(`sorted-${order}`);
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            sortTable(0);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<form action="/joburi/edit/<%= job.id_job %>" method="post">
+
+    <label for="nume">Nume:</label>
+    <input type="text" id="nume" name="nume" value="<%= job.nume %>" required>
+
+    <label for="salariu_minim">Salariu_minim:</label>
+    <input type="number" id="salariu_minim" name="salariu_minim" value="<%= job.salariu_minim %>" required>
+
+    <label for="salariu_maxim">Salariu_maxim:</label>
+    <input type="number" id="salariu_maxim" name="salariu_maxim" value="<%= job.salariu_maxim %>" required>
+
+    <button type="submit">Save Changes</button>
+</form>

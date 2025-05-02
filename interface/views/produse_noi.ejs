@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+        
+        .sorted-asc::after {
+            content: ' ↑';
+        } 
+
+         .sorted-desc::after {
+            content: ' ↓';
+        } 
+
+    </style>
+</head>
+<body>
+    <h1>Lista Produselor Noi dupa o anumita data</h1>
+    <table id="donatiiTable">
+        <thead>
+            <tr>
+                <th class="sortable" onclick="sortTable(0)">Id_Donatie</th>
+                <th class="sortable" onclick="sortTable(1)">Data_Donatie</th>
+                <th class="sortable" onclick="sortTable(2)">Id_Produs</th>                
+                <th class="sortable" onclick="sortTable(3)">Nume_Produse</th>
+                <th class="sortable" onclick="sortTable(4)">Stare_Produs</th>
+                <th class="sortable" onclick="sortTable(5)">Nume_furnizor</th>
+                <th class="sortable" onclick="sortTable(6)">Pret</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% donatii.forEach(produs_nou => { %>
+                <tr>
+                    <td><%= produs_nou.id_donatie %></td>
+                    <td><%= produs_nou.data_donatie.toISOString().split('T')[0] %></td>
+                    <td><%= produs_nou.produs %></td>
+                    <td><%= produs_nou.nume_produs %></td>
+                    <td><%= produs_nou.stare_produs %></td>
+                    <td><%= produs_nou.nume_furnizor %></td>
+                    <td><%= produs_nou.pret %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <script>
+        const sortOrder = new Array(6).fill('asc');
+    
+        function sortTable(columnIndex) {
+            const table = document.getElementById('donatiiTable');
+            const rows = Array.from(table.rows).slice(1);
+    
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].textContent.trim();
+                const cellB = b.cells[columnIndex].textContent.trim();
+    
+                return cellA.localeCompare(cellB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+    
+            if (sortOrder[columnIndex] === 'desc') {
+                rows.reverse();
+                sortOrder[columnIndex] = 'asc';
+            } else {
+                sortOrder[columnIndex] = 'desc';
+            }
+    
+            for (const row of rows) {
+                table.tBodies[0].appendChild(row);
+            }
+    
+            resetSortIndicators(columnIndex);
+            updateSortIndicator(columnIndex, sortOrder[columnIndex]);
+        }
+    
+        function resetSortIndicators(currentColumn) {
+            const headers = document.querySelectorAll('#donatiiTable th');
+    
+            headers.forEach((header, index) => {
+                if (index !== currentColumn) {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
+        }
+    
+        function updateSortIndicator(columnIndex, order) {
+            const headers = document.querySelectorAll('#donatiiTable th');
+    
+            headers.forEach((header, index) => {
+                if (index === columnIndex) {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    header.classList.add(`sorted-${order}`);
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            sortTable(0);
+        });
+    </script>
+    
+</body>
+</html>

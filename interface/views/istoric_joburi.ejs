@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+        
+        .sorted-asc::after {
+            content: ' ↑';
+        } 
+
+         .sorted-desc::after {
+            content: ' ↓';
+        } 
+
+    </style>
+</head>
+<body>
+    <h1>Lista Istoricelor</h1>
+    <table id="istoric_joburiTable">
+        <thead>
+            <tr>
+                <th class="sortable" onclick="sortTable(0)">Data_angajare</th>
+                <th class="sortable" onclick="sortTable(1)">Angajat</th>
+                <th class="sortable" onclick="sortTable(2)">Nume_Angajat</th>
+                <th class="sortable" onclick="sortTable(3)">Job</th>
+                <th class="sortable" onclick="sortTable(4)">Data_demisie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% istoric_joburi.forEach(istoric => { %>
+                <tr>
+                    <td><%= istoric.data_angajare.toISOString().split('T')[0] %></td>
+                    <td><%= istoric.angajat %></td>
+                    <td><%= istoric.nume_angajat %></td>
+                    <td><%= istoric.job %></td>
+                    <td><%= istoric.data_demisie ? istoric.data_demisie.toISOString().split('T')[0] : '' %></td>
+                    <td>
+                        <!-- <a href="/istoric_joburi/edit/<%= encodeURIComponent(istoric.data_angajare) %>" class="btn btn-primary btn-sm">Edit</a> -->
+                        <a href="/istoric_joburi/delete/<%= istoric.data_angajare %>" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                    </td>
+
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <script>
+        const sortOrder = new Array(6).fill('asc');
+    
+        function sortTable(columnIndex) {
+            const table = document.getElementById('istoric_joburiTable');
+            const rows = Array.from(table.rows).slice(1);
+    
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].textContent.trim();
+                const cellB = b.cells[columnIndex].textContent.trim();
+    
+                return cellA.localeCompare(cellB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+    
+            if (sortOrder[columnIndex] === 'desc') {
+                rows.reverse();
+                sortOrder[columnIndex] = 'asc';
+            } else {
+                sortOrder[columnIndex] = 'desc';
+            }
+    
+            for (const row of rows) {
+                table.tBodies[0].appendChild(row);
+            }
+    
+            resetSortIndicators(columnIndex);
+            updateSortIndicator(columnIndex, sortOrder[columnIndex]);
+        }
+    
+        function resetSortIndicators(currentColumn) {
+            const headers = document.querySelectorAll('#istoric_joburiTable th');
+    
+            headers.forEach((header, index) => {
+                if (index !== currentColumn) {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
+        }
+    
+        function updateSortIndicator(columnIndex, order) {
+            const headers = document.querySelectorAll('#istoric_joburiTable th');
+    
+            headers.forEach((header, index) => {
+                if (index === columnIndex) {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    header.classList.add(`sorted-${order}`);
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            sortTable(0);
+        });
+    </script>
+</body>
+</html>
